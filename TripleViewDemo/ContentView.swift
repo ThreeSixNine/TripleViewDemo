@@ -8,14 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var dataManager = ModelDataManager()
+    @StateObject var navigationManager = NavigationStateManager()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
+        NavigationSplitView(columnVisibility: $navigationManager.columnVisibility, sidebar: {
+            SidebarView()
+                .navigationSplitViewColumnWidth(200)
+        }, content: {
+            MiddleView()
+                .navigationSplitViewColumnWidth(min: 1 00, ideal: 250, max: 500)
+        }, detail: {
+            DetailView() 
+        })
         .padding()
+        .environmentObject(dataManager)
+        .environmentObject(navigationManager)
+        .navigationSplitViewStyle(.balanced)
     }
 }
 
